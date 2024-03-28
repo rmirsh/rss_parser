@@ -7,7 +7,7 @@ class AbstractGetter(ABC):
         pass
 
     @abstractmethod
-    def _get_data(self):
+    def get_data(self):
         pass
 
 
