@@ -12,6 +12,7 @@ pydantic-settings = "^2.2.1"
 ipython = "^8.22.2"
 beautifulsoup4 = "^4.12.3"
 lxml = "^5.1.0"
+black = "^24.3.0"
 
 
 [build-system]
