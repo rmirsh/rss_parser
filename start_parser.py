@@ -11,7 +11,7 @@ def main():
             parser = RSSParser()
             parser.parse_news()
 
-            time.sleep(settings.TIME_SLEEP)
+            time.sleep(settings.INTERVAL)
     except KeyboardInterrupt:
         if settings.SHOW_STATISTICS:
             display_statistics(settings.JSON_FILE)

@@ -13,7 +13,7 @@ def display_statistics(file: Path) -> None:
             today_news = _find_today_news(news)
             most_frequent_category = _find_most_frequent_category(today_news)
             today_count = _count_categories(today_news)
-            print(f"Most frequent category today: {most_frequent_category}")
+            print(f"\nMost frequent category today: {most_frequent_category}")
             print(f"News quantity by categories today: ", end="")
             pprint(today_count, indent=4, width=100)
     except FileNotFoundError as error:
