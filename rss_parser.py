@@ -1,5 +1,5 @@
 import json
-from json import JSONDecodeError
+import os
 from pathlib import Path
 import time
 
@@ -30,13 +30,13 @@ class NewsGetter(AbstractGetter):
 
             except httpx.HTTPStatusError as error:
                 print(f"Request error: {error}")
-                print(f"\nRequesting again...\nAttempt no. {attempt + 1}\n")
+                print(f"\nRequesting again...\nAttempt no. {attempt + 1}\n" if attempt > 0 else "")
 
             time.sleep(1)
 
         raise HTTPError(f"Couldn't get response from {self.url}")
 
-    def _get_data(self) -> ResultSet | None:
+    def _get_data(self) -> ResultSet:
         response = self._get_response()
         if response is None:
             raise EmptyResponseError("Response is empty")
@@ -46,7 +46,7 @@ class NewsGetter(AbstractGetter):
 
         return items
 
-    def convert_xml_to_json(self) -> list[dict[str, str]] | None:
+    def convert_xml_to_json(self) -> list[dict[str, str]]:
         items_json = []
         items = self._get_data()
 
@@ -72,22 +72,24 @@ class JsonLogger(AbstractLogger):
         self._json_file = json_file
 
     def log_to_file(self, json_data: list[dict[str, str]]) -> None:
-        with open(f"{self._json_file}", "a") as json_file:
-            for data in json_data:
-                if not self._find_duplicate(data, 'title'):
-                    json.dump(json_data, json_file, indent=4, ensure_ascii=False)
+        with open(f"{self._json_file}", "w") as json_file:
+            uniques = self._find_uniques(json_data)
+            json.dump(uniques, json_file, indent=4)
 
-    def _find_duplicate(self, item: dict, field: str) -> bool:
-        try:
+    def _find_uniques(self, new_json_data: list[dict[str, str]]) -> list:
+        if os.path.getsize(self._json_file) == 0:
+            return new_json_data
+        else:
             with open(f"{self._json_file}", "r") as json_file:
-                data = json.load(json_file)
+                old_json_data = json.load(json_file)
+                new_json_set = set(tuple(d.items()) for d in new_json_data)
+                old_json_set = set(tuple(d.items()) for d in old_json_data)
 
-                for chunk in data:
-                    if chunk['title'] == item[field]:
-                        return True
-                return False
-        except JSONDecodeError as error:
-            print(f"Error: {error}")
+            difference = new_json_set - old_json_set
+            uniques = [dict(item) for item in difference]
+            extended = old_json_data.extend(uniques)
+
+            return extended
 
 
 class Logger(AbstractLogger):
@@ -97,7 +99,7 @@ class Logger(AbstractLogger):
 
     def log_to_file(self, message: str) -> None:
         with open(self._file, 'a') as file:
-            file.write(message + '\n')
+            file.write(f"\n{message}\n")
 
 
 if __name__ == '__main__':
@@ -105,4 +107,3 @@ if __name__ == '__main__':
     json_logger = JsonLogger(settings.JSON_FILE)
     articles = getter.convert_xml_to_json()
     json_logger.log_to_file(articles)
-    # pprint(getter.convert_xml_to_json())
