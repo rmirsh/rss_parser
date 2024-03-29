@@ -22,7 +22,6 @@ or
 source .venv/bin/activate
 ```
 
----
 ### Configuration
 
 You need to specify the environment variables in `.env`-file.  
