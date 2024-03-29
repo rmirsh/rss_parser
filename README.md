@@ -1,6 +1,6 @@
 # RSS Parser
 
----
+
 This is an   over-engineered script for retrieving RSS news feeds.  
 For example [NY Times RSS-feed](https://rss.nytimes.com/services/xml/rss/nyt/PersonalTech.xml) in category "Perasonal Tech".
 
@@ -22,6 +22,7 @@ or
 source .venv/bin/activate
 ```
 
+---
 ### Configuration
 
 You need to specify the environment variables in `.env`-file.  
