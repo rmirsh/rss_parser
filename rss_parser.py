@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from common.exceptions import HTTPError
+from exceptions import HTTPError
 from loggers import TextLogger, JsonLogger
 from getters import NewsGetter
 

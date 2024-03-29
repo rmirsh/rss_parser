@@ -2,7 +2,7 @@ import json
 import os
 from pathlib import Path
 
-from common.abstracts import AbstractLogger
+from abstracts import AbstractLogger
 
 
 class JsonLogger(AbstractLogger):

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from common.abstracts import AbstractLogger
+from abstracts import AbstractLogger
 
 
 class TextLogger(AbstractLogger):

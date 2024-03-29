@@ -4,8 +4,8 @@ import httpx
 from bs4 import BeautifulSoup as bs4
 from bs4 import ResultSet
 
-from common.abstracts import AbstractGetter
-from common.exceptions import EmptyResponseError, HTTPError
+from abstracts import AbstractGetter
+from exceptions import EmptyResponseError, HTTPError
 
 
 class NewsGetter(AbstractGetter):
