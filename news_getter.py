@@ -1,16 +1,16 @@
 import time
+from abc import ABC, abstractmethod
 
 import httpx
 from bs4 import BeautifulSoup as bs4
 from bs4 import ResultSet
 
-from abstracts import AbstractGetter
 from exceptions import EmptyResponseError, HTTPError
 
 
-class NewsGetter(AbstractGetter):
+class AbstractGetter(ABC):
     """
-    Class that retrieve RSS news in XML and convert them into python dict.
+    Abstract info getter.
 
     :param url: URL to request RSS news.
     """
@@ -18,8 +18,22 @@ class NewsGetter(AbstractGetter):
     def __init__(self, url: str) -> None:
         self.url = url
 
+    @abstractmethod
+    def _get_response(self):
+        pass
+
+    @abstractmethod
+    def get_data(self):
+        pass
+
+
+class NewsGetter(AbstractGetter):
+    """
+    Class that retrieve RSS news in XML and convert them into python dict.
+    """
+
     def _get_response(self) -> httpx.Response | None:
-        """Make request to retrieve XML"""
+        """Make request to retrieve XML."""
         for attempt in range(4):
             try:
                 response = httpx.get(self.url)
@@ -62,7 +76,7 @@ class NewsGetter(AbstractGetter):
 
             article_data = {
                 "title": title.text,
-                "category": category.text,
+                "category": category.text if category else "Category not specified",
                 "date": pub_date.text,
             }
 
