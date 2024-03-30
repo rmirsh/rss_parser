@@ -26,6 +26,7 @@ class RSSParser:
 
         except HTTPError as error:
             self._log_error(error)
+            exit(1)
 
     def _log_succees(self) -> None:
         """Log success message."""
