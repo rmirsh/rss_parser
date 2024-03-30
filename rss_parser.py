@@ -2,7 +2,7 @@ from datetime import datetime
 
 from exceptions import HTTPError
 from loggers import TextLogger, JsonLogger
-from getters import NewsGetter
+from news_getter import NewsGetter
 
 from config import settings
 
@@ -32,7 +32,7 @@ class RSSParser:
         message = f"News was succesfuly written at {datetime.now()}"
         self.text_logger.log_to_file(message)
 
-    def _log_error(self, error) -> None:
+    def _log_error(self, error: Exception) -> None:
         """Log error message."""
         message = f"News wasn't written at {datetime.now()}\nDue to error:\n{error}"
         self.text_logger.log_to_file(message)
